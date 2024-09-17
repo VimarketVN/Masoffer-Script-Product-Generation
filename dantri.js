@@ -1,8 +1,6 @@
 // Cấu hình script
 let publisherAPIToken = "gKICt6SQG8Fuad7JTZmqQw";
-let productListContainer =
-  document.querySelector("#mobile-article-bottom") ||
-  document.querySelector("#desktop-article-bottom");
+let productListContainer = document.querySelector('script[src*="VimarketVN"]');
 
 // Hàm xử lý lấy keyword tự động
 const keywords = (function () {
@@ -17,10 +15,11 @@ const getProductInfo = async (url, category, keywords) => {
   const myHeaders = new Headers();
   myHeaders.append("Authentication", "waXTDuEAOHIfNTXnNmFXBMweoYM2z4");
   myHeaders.append("Content-Type", "application/json");
+  let checkDevice = document.querySelector("#mobile-article-bottom") || document.querySelector("#desktop-article-bottom");
   const raw = JSON.stringify({
     post_url: url,
     category: category,
-    container_id: productListContainer.getAttribute("id"),
+    container_id: checkDevice.getAttribute("id"),
     publisher_key: publisherAPIToken,
     keyword: keywords,
   });
@@ -35,7 +34,7 @@ const getProductInfo = async (url, category, keywords) => {
     .then(({ list_id, publisher_id }) => {
       let container = document.createElement("div");
       container.id = `mo-product-list-${list_id}`;
-      productListContainer.appendChild(container);
+      productListContainer.insertAdjacentElement("beforebegin", container);
       let script = document.createElement("script");
       script.src = `https://ecom.masoffer.com/api/generate-component?publiser_id=${publisher_id}&list_id=${list_id}`;
       script.type = "text/javascript";
